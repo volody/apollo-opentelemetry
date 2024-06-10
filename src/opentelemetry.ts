@@ -1,5 +1,4 @@
 // src/opentelemetry.ts
-import { NodeSDK } from "@opentelemetry/sdk-node";
 import {
   ConsoleSpanExporter,
   SimpleSpanProcessor,
@@ -8,19 +7,25 @@ import { Resource } from "@opentelemetry/resources";
 import { SEMRESATTRS_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { GraphQLInstrumentation } from "@opentelemetry/instrumentation-graphql";
+import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+import { registerInstrumentations } from "@opentelemetry/instrumentation";
 
-const sdk = new NodeSDK({
+const provider = new NodeTracerProvider({
   resource: new Resource({
-    [SEMRESATTRS_SERVICE_NAME]: "apollo-server",
+    [SEMRESATTRS_SERVICE_NAME]: "graphql-service",
   }),
-  traceExporter: new ConsoleSpanExporter(),
-  spanProcessor: new SimpleSpanProcessor(new ConsoleSpanExporter()),
-  instrumentations: [
-    new HttpInstrumentation(),
-    new GraphQLInstrumentation({
-      mergeItems: true,
-    }),
-  ],
 });
 
-sdk.start();
+provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+provider.register();
+
+registerInstrumentations({
+  instrumentations: [
+    new GraphQLInstrumentation({
+      // allowAttributes: true,
+      // depth: 2,
+      // mergeItems: true,
+    }),
+    new HttpInstrumentation(),
+  ],
+});

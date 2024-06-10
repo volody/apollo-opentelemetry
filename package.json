@@ -26,7 +26,6 @@
     "@opentelemetry/sdk-node": "^0.52.0",
     "@opentelemetry/semantic-conventions": "^1.25.0",
     "apollo-server": "^3.13.0",
-    "applicationinsights": "^3.1.0",
     "dotenv": "^16.4.5",
     "graphql": "^16.8.1",
     "reflect-metadata": "^0.2.2",
