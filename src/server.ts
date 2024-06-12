@@ -1,4 +1,3 @@
-// src/server.ts
 import "./opentelemetry";
 
 import "reflect-metadata"; // Required for TypeGraphQL
